@@ -1,0 +1,27 @@
+# ==========================================================================
+#  Proteksi folder UPLOAD (bukti pembelian JPG/PNG/PDF)
+#  Tujuan: file yang diupload TIDAK BISA dieksekusi sebagai skrip.
+# ==========================================================================
+Options -Indexes -ExecCGI
+
+<IfModule mod_authz_core.c>
+  <FilesMatch "\.(php|phtml|php3|php4|php5|php7|php8|phar|pl|py|cgi|sh|asp|aspx|jsp)$">
+    Require all denied
+  </FilesMatch>
+</IfModule>
+<IfModule !mod_authz_core.c>
+  <FilesMatch "\.(php|phtml|php3|php4|php5|php7|php8|phar|pl|py|cgi|sh|asp|aspx|jsp)$">
+    Order allow,deny
+    Deny from all
+  </FilesMatch>
+</IfModule>
+
+# Cabut handler PHP sehingga file .php (bila lolos) hanya jadi teks
+RemoveHandler .php .phtml .php3 .php4 .php5 .php7 .php8 .phar
+RemoveType .php .phtml .php3 .php4 .php5 .php7 .php8 .phar
+AddType text/plain .php .phtml .php3 .php4 .php5 .php7 .php8 .phar
+
+# Cegah sniffing tipe konten
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+</IfModule>
