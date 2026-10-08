@@ -1,0 +1,98 @@
+**BUAT WEBSITE OUTING MANAGEMENT SYSTEM (100% INFINITYFREE)**
+
+**1. ATURAN & TEKNOLOGI MUTLAK**
+
+* **Wajib:** PHP Native, MySQL/MariaDB, HTML5, CSS3, Vanilla JS/AJAX, Bootstrap 5, PHP PDF Library & PHP Excel Library (kompatibel shared hosting).
+
+
+* **Dilarang Keras:** Node.js, `npm install`, Vercel, Netlify, Firebase, Supabase, Postgres, API/layanan eksternal, Email Verification, OTP, Register Member, Lupa Password via Email.
+
+
+* **Keamanan:** `password_hash()` & `password_verify()`, PDO/MySQLi Prepared Statements, validasi/sanitasi input, proteksi SQL Injection, CSRF, validasi MIME/ekstensi upload. Credential DB wajib di `config/database.php`. Backend wajib cek hak akses/session (jangan sekadar sembunyikan tombol).
+
+
+
+**2. STRUKTUR & DATABASE**
+
+* **Struktur Folder:** `/public_html` berisi `index.php`, `/admin`, `/member`, `/api`, `/config`, `/assets`, dan `/uploads/outing/{outing_id}/` (wajib pisah folder per outing dengan nama file aman).
+
+
+* **File DB (`database.sql`):** Wajib berisi CREATE TABLE, PK, FK, Index, Default, dan Data Awal.
+
+
+* **Tabel Wajib:** `users` (id, user_id unique, nama, password hash, role, status), `outings`, `outing_participants` (attendance_status & payment_status pisah), `rundown`, `categories` (dinamis/bisa ditambah manual), `purchases`.
+
+
+
+**3. MANAJEMEN OUTING (MULTI-OUTING & HISTORY)**
+
+* Mendukung banyak outing dengan ID berbeda.
+
+
+* **Status Outing:** *Planning* & *Active* (tampil di Dashboard Outing Aktif), *Selesai* & *Cancelled* (otomatis masuk ke Dashboard History).
+
+
+* **History:** Bersifat *read-only* secara default (bisa filter tahun/status/tujuan), tapi Admin diberi tombol "Edit History" dengan konfirmasi jika butuh koreksi. Bikin outing baru tidak boleh menimpa/menghapus data lama.
+
+
+* **Workflow Sistem:** Admin membuat outing -> tambah peserta -> buat rundown -> input pembelian/upload bukti -> set selesai -> update pembayaran akhir -> download PDF.
+
+
+
+**4. FITUR ADMIN (FULL AKSES - CRUD)**
+
+* **User:** CRUD user, aktif/nonaktif, reset password. Login via User ID + Password.
+
+
+* **Peserta:** Menambah user ke outing (satu user bisa ikut banyak outing). Set Kehadiran (Ikut/Batal/Tidak Ikut) & Pembayaran (Sudah/Belum).
+
+
+* **Rundown:** CRUD jadwal, lokasi, keterangan, atur urutan.
+
+
+* **Pembelian:** CRUD pengeluaran, pilih kategori dinamis, hitung otomatis (Qty × Harga).
+
+
+* **Upload Bukti:** Ekstensi JPG/PNG/PDF.
+
+
+* **UI/UX:** Dashboard menampilkan ringkasan peserta & total pengeluaran per kategori. Wajib *Confirmation Dialog* sebelum hapus data apa pun. Gunakan Badge (status) & Card (info).
+
+
+
+**5. FITUR MEMBER (100% VIEW ONLY)**
+
+* Hanya bisa melihat dashboard, info outing yg diikuti, rundown (tampilan timeline/card HP), peserta, status diri, pembelian, dan bukti bayar. Tolak akses dan redirect ke dashboard member jika mencoba buka URL admin.
+
+
+
+**6. FITUR IMPORT EXCEL (.xlsx) & EXPORT PDF**
+
+* **Import Excel (User, Peserta, Pembelian):**
+* Sediakan tombol "Download Template Excel" berisi *Sheet 1: DATA* dan *Sheet 2: PETUNJUK* (format/status valid).
+
+
+* **Alur:** Upload -> Sistem Validasi -> Halaman Preview (tampilkan valid/error per baris) -> Klik "Konfirmasi Import". Abaikan error, proses data yang valid.
+
+
+* Jika kategori pembelian tidak ada, beri tombol "Buat Kategori Otomatis" atau batalkan baris. Abaikan total di Excel, sistem hitung ulang Qty*Harga.
+
+
+
+
+* **Export PDF (Berdasarkan `outing_id`):**
+* Header (Nama, Tanggal, Lokasi), Ringkasan Peserta/Keuangan, Daftar Peserta, Rundown, Rekap Pengeluaran per Kategori, Detail Pembelian. Bisa unduh PDF untuk outing aktif maupun history.
+
+
+
+
+
+**7. TUGAS & OUTPUT YANG HARUS DIBERIKAN**
+
+1. **Tahap 1 (Sebelum Coding):** Tampilkan analisis arsitektur, struktur DB & relasi, struktur folder, alur auth, alur admin, alur member.
+
+
+2. **Tahap 2 (Deliverables):** Berikan seluruh *source code*, `database.sql`, dan file `README`.
+
+
+3. **README:** Wajib berisi tutorial 8 step instalasi dari nol (Buat hosting -> Buat DB -> Import SQL -> Upload ke `public_html` -> Edit config -> Buka web -> Login admin default).
