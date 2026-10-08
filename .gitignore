@@ -1,0 +1,9 @@
+# File bukti yang diupload pengguna — JANGAN ikut version control
+uploads/outing/*
+!uploads/outing/index.html
+
+# File sistem / editor
+.DS_Store
+Thumbs.db
+*.log
+*.zip

@@ -1,0 +1,56 @@
+# ==========================================================================
+#  OUTING MANAGEMENT SYSTEM — .htaccess (ROOT / public_html)
+# --------------------------------------------------------------------------
+#  Berfungsi untuk:
+#   1. Melarang listing isi folder
+#   2. Memblokir akses langsung ke folder sensitif (config, includes, libs)
+#   3. Memblokir unduhan file berbahaya/privat (.sql, .md, .log, .env, dsb.)
+#   4. Menjaga index.php sebagai halaman default
+#
+#  Catatan: bila hosting Anda tidak mengizinkan .htaccess, hapus file ini
+#  dan pastikan folder config/includes/libs berada DI LUAR public_html.
+# ==========================================================================
+
+# Matikan directory listing
+Options -Indexes
+
+# Halaman default
+DirectoryIndex index.php index.html
+
+# --------------------------------------------------------------------------
+# Blokir akses web ke folder internal aplikasi
+# --------------------------------------------------------------------------
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # config/, includes/, libs/ tidak boleh diakses langsung dari browser
+  RewriteRule ^(config|includes|libs)(/|$) - [F,L,NC]
+
+  # Blokir file sensitif apa pun
+  RewriteRule (^|/)\.(htaccess|htpasswd|gitignore|env)$ - [F,L,NC]
+</IfModule>
+
+# --------------------------------------------------------------------------
+# Blokir tipe file yang tidak boleh diunduh pengunjung
+# --------------------------------------------------------------------------
+<IfModule mod_authz_core.c>
+  <FilesMatch "\.(sql|md|log|ini|env|lock|bak|old|save|swp|dist|json|yml|yaml)$">
+    Require all denied
+  </FilesMatch>
+</IfModule>
+<IfModule !mod_authz_core.c>
+  <FilesMatch "\.(sql|md|log|ini|env|lock|bak|old|save|swp|dist|json|yml|yaml)$">
+    Order allow,deny
+    Deny from all
+  </FilesMatch>
+</IfModule>
+
+# --------------------------------------------------------------------------
+# Batas upload (abaikan bila hosting menolak — atur lewat cPanel/php.ini)
+# --------------------------------------------------------------------------
+<IfModule mod_php7.c>
+  php_value upload_max_filesize 4M
+  php_value post_max_size 8M
+  php_value max_execution_time 120
+</IfModule>
